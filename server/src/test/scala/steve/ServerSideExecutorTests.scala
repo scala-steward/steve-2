@@ -2,8 +2,8 @@ package steve
 
 import munit.CatsEffectSuite
 
-class ExecutorTests extends CatsEffectSuite {
-    val exec = Executor.instance[Either[Throwable, *]]
+class ServerSideExecutorTests extends CatsEffectSuite {
+    val exec = ServerSideExecutor.instance[Either[Throwable, *]]
 
     test("build and run empty image") {
         assertEquals(
