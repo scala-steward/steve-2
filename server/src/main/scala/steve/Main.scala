@@ -18,13 +18,11 @@ object Main extends IOApp.Simple {
       .withHttpApp {
         import sttp.tapir.server.http4s.Http4sServerInterpreter
 
+        val exec = ServerSideExecutor.instance[IO]
+
         val se: List[ServerEndpoint[Any, IO]] = List(
-          protocol.build.serverLogicSuccess { build =>
-            IO.println(build).as(Hash(Array.emptyByteArray))
-          },
-          protocol.run.serverLogicSuccess { hash =>
-            IO.println(hash).as(SystemState(Map.empty))
-          }
+          protocol.build.serverLogicSuccess(exec.build),
+          protocol.run.serverLogicSuccess(exec.run)
         )
         Http4sServerInterpreter[IO]().toRoutes(se).orNotFound
       }

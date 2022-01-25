@@ -2,7 +2,7 @@ package steve
 
 import io.circe.Codec
 
-enum Command {
+enum Command derives Codec.AsObject {
   case Build()
   case Run(hash: Hash)
 }
@@ -10,7 +10,7 @@ enum Command {
 final case class Build(
   base: Build.Base,
   commands: List[Build.Command],
-)
+) derives Codec.AsObject
 
 object Build {
 
