@@ -12,6 +12,3 @@ object Executor {
   def apply[F[_]](using F: Executor[F]): Executor[F] = F
 }
 
-trait SystemState {
-  def getAll: Map[String, String]
-}

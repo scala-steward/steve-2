@@ -6,13 +6,28 @@ val commonSettings = Seq(
   scalacOptions -= "-Xfatal-warnings",
   libraryDependencies ++= Seq(
     "org.typelevel" %% "cats-effect" % "3.2.9",
-    "org.typelevel" %% "munit-cats-effect-3" % "1.0.5" % Test
-  )
+    "org.typelevel" %% "munit-cats-effect-3" % "1.0.5" % Test,
+  ),
 )
 
-val shared = project.settings(commonSettings)
+val shared = project.settings(
+  commonSettings,
+  libraryDependencies ++= Seq(
+    "com.softwaremill.sttp.tapir" %% "tapir-core" % "0.19.3",
+    "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % "0.19.3",
+  ),
+)
 
-val server = project.settings(commonSettings).dependsOn(shared)
+val server = project
+  .settings(
+    commonSettings,
+    libraryDependencies ++= Seq(
+      "org.http4s" %% "http4s-dsl" % "0.23.3",
+      "org.http4s" %% "http4s-ember-server" % "0.23.3",
+      "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % "0.19.3",
+    ),
+  )
+  .dependsOn(shared)
 
 val client = project.settings(commonSettings).dependsOn(shared)
 
