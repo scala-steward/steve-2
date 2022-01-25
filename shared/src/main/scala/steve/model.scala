@@ -19,15 +19,15 @@ object Build {
     commands = Nil,
   )
 
-    enum Base derives Codec.AsObject {
-        case EmptyImage
-        case ImageReference(hash: Hash)
-    }
+  enum Base derives Codec.AsObject {
+    case EmptyImage
+    case ImageReference(hash: Hash)
+  }
 
-    enum Command derives Codec.AsObject {
-        case Upsert(key: String, value: String)
-        case Delete(key: String)
-    }
+  enum Command derives Codec.AsObject {
+    case Upsert(key: String, value: String)
+    case Delete(key: String)
+  }
 
 }
 
