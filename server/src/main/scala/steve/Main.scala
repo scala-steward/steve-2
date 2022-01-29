@@ -22,7 +22,7 @@ object Main extends IOApp.Simple {
 
         val se: List[ServerEndpoint[Any, IO]] = List(
           protocol.build.serverLogicSuccess(exec.build),
-          protocol.run.serverLogicSuccess(exec.run)
+          protocol.run.serverLogicSuccess(exec.run),
         )
         Http4sServerInterpreter[IO]().toRoutes(se).orNotFound
       }

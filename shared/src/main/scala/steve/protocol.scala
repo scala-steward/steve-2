@@ -14,8 +14,9 @@ object protocol {
     .out(jsonBody[Hash])
 
   val run = base
-  .post
-  .in("run")
-  .in(jsonBody[Hash])
-  .out(jsonBody[SystemState])
+    .post
+    .in("run")
+    .in(jsonBody[Hash])
+    .out(jsonBody[SystemState])
+
 }

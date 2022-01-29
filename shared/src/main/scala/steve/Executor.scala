@@ -11,4 +11,3 @@ trait Executor[F[_]] {
 object Executor {
   def apply[F[_]](using F: Executor[F]): Executor[F] = F
 }
-
