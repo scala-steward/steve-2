@@ -31,6 +31,6 @@ object Build {
 
 }
 
-final case class Hash(value: Array[Byte]) derives Codec.AsObject
+final case class Hash(value: List[Byte]) derives Codec.AsObject
 
 final case class SystemState(getAll: Map[String, String]) derives Codec.AsObject

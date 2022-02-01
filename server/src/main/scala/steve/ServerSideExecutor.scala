@@ -8,7 +8,7 @@ object ServerSideExecutor {
 
   def instance[F[_]: ApplicativeThrow]: Executor[F] =
     new Executor[F] {
-      private val emptyHash: Hash = Hash(Array.emptyByteArray)
+      private val emptyHash: Hash = Hash(List.empty)
 
       def build(build: Build): F[Hash] = (build == Build.empty)
         .guard[Option]
