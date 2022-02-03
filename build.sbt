@@ -22,8 +22,8 @@ val server = project
   .settings(
     commonSettings,
     libraryDependencies ++= Seq(
-      "org.http4s" %% "http4s-dsl" % "0.23.9",
-      "org.http4s" %% "http4s-ember-server" % "0.23.9",
+      "org.http4s" %% "http4s-dsl" % "0.23.10",
+      "org.http4s" %% "http4s-ember-server" % "0.23.10",
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % "0.19.3",
       "ch.qos.logback" % "logback-classic" % "1.2.10",
     ),
@@ -34,7 +34,7 @@ val client = project
   .settings(
     commonSettings,
     libraryDependencies ++= Seq(
-      "org.http4s" %% "http4s-ember-client" % "0.23.9",
+      "org.http4s" %% "http4s-ember-client" % "0.23.10",
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-client" % "0.19.3",
     ),
   )
