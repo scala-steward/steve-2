@@ -12,7 +12,6 @@ object Main extends IOApp.Simple {
     val exec = ClientSideExecutor.instance[IO](client)
     
     exec.build(Build.empty)
-    .flatMap(h => IO.println(s"size = ${h.value.size}").as(h))
     .flatMap(exec.run)
     .flatMap(IO.println)
   }
