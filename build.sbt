@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.1.0"
+ThisBuild / scalaVersion := "3.1.1"
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / githubWorkflowPublishTargetBranches := Seq()
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -8,7 +8,7 @@ val Versions = new {
   val munit = "1.0.7"
   val tapir = "0.19.3"
   val http4s = "0.23.9"
-  val logback = "1.2.3"
+  val logback = "1.2.10"
 }
 
 val commonSettings = Seq(
