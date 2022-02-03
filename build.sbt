@@ -34,7 +34,7 @@ val client = project
   .settings(
     commonSettings,
     libraryDependencies ++= Seq(
-      "org.http4s" %% "http4s-ember-client" % "0.23.3",
+      "org.http4s" %% "http4s-ember-client" % "0.23.9",
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-client" % "0.19.3",
     ),
   )
