@@ -10,10 +10,11 @@ object Main extends IOApp.Simple {
   def run: IO[Unit] = EmberClientBuilder.default[IO].build.use { client =>
     given Http4sClientInterpreter[IO] = Http4sClientInterpreter[IO]()
     val exec = ClientSideExecutor.instance[IO](client)
-    
-    exec.build(Build.empty)
-    .flatMap(exec.run)
-    .flatMap(IO.println)
+
+    exec
+      .build(Build.empty)
+      .flatMap(exec.run)
+      .flatMap(IO.println)
   }
 
 }

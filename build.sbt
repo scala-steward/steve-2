@@ -3,13 +3,14 @@ ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / githubWorkflowPublishTargetBranches := Seq()
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-val Versions = new {
-  val catsEffect = "3.3.5"
-  val munit = "1.0.7"
-  val tapir = "0.19.3"
-  val http4s = "0.23.9"
-  val logback = "1.2.10"
-}
+val Versions =
+  new {
+    val catsEffect = "3.3.5"
+    val munit = "1.0.7"
+    val tapir = "0.19.3"
+    val http4s = "0.23.9"
+    val logback = "1.2.10"
+  }
 
 val commonSettings = Seq(
   scalacOptions -= "-Xfatal-warnings",
