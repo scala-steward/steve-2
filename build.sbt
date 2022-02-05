@@ -20,6 +20,19 @@ val commonSettings = Seq(
   ),
 )
 
+val nativeImageSettings = Seq(
+  Compile / mainClass := Some("steve.Main"),
+  nativeImageVersion := "21.2.0",
+  nativeImageOptions ++= Seq(
+    s"-H:ReflectionConfigurationFiles=${(Compile / resourceDirectory).value / "reflect-config.json"}",
+    s"-H:ResourceConfigurationFiles=${(Compile / resourceDirectory).value / "resource-config.json"}",
+    "-H:+ReportExceptionStackTraces",
+    "--no-fallback", // Don't fall back to the JVM if the native build fails
+    "--allow-incomplete-classpath",
+  ),
+  nativeImageAgentMerge := true,
+)
+
 val shared = project.settings(
   commonSettings,
   libraryDependencies ++= Seq(
@@ -48,15 +61,7 @@ val client = project
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-client" % Versions.tapir,
       "ch.qos.logback" % "logback-classic" % Versions.logback,
     ),
-    Compile / mainClass := Some("steve.Main"),
-    nativeImageVersion := "21.2.0",
-    nativeImageOptions ++= Seq(
-      s"-H:ReflectionConfigurationFiles=${(Compile / resourceDirectory).value / "reflect-config.json"}",
-      s"-H:ResourceConfigurationFiles=${(Compile / resourceDirectory).value / "resource-config.json"}",
-      "-H:+ReportExceptionStackTraces",
-      "--no-fallback", // Don't fall back to the JVM if the native build fails
-      "--allow-incomplete-classpath",
-    ),
+    nativeImageSettings
   )
   .enablePlugins(NativeImagePlugin)
   .dependsOn(shared)
