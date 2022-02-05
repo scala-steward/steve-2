@@ -3,13 +3,14 @@ ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / githubWorkflowPublishTargetBranches := Seq()
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-val Versions = new {
-  val catsEffect = "3.3.5"
-  val munit = "1.0.7"
-  val tapir = "0.19.3"
-  val http4s = "0.23.9"
-  val logback = "1.2.10"
-}
+val Versions =
+  new {
+    val catsEffect = "3.3.5"
+    val munit = "1.0.7"
+    val tapir = "0.19.3"
+    val http4s = "0.23.9"
+    val logback = "1.2.10"
+  }
 
 val commonSettings = Seq(
   scalacOptions -= "-Xfatal-warnings",
@@ -17,6 +18,19 @@ val commonSettings = Seq(
     "org.typelevel" %% "cats-effect" % Versions.catsEffect,
     "org.typelevel" %% "munit-cats-effect-3" % Versions.munit % Test,
   ),
+)
+
+val nativeImageSettings = Seq(
+  Compile / mainClass := Some("steve.Main"),
+  nativeImageVersion := "21.2.0",
+  nativeImageOptions ++= Seq(
+    s"-H:ReflectionConfigurationFiles=${(Compile / resourceDirectory).value / "reflect-config.json"}",
+    s"-H:ResourceConfigurationFiles=${(Compile / resourceDirectory).value / "resource-config.json"}",
+    "-H:+ReportExceptionStackTraces",
+    "--no-fallback", // Don't fall back to the JVM if the native build fails
+    "--allow-incomplete-classpath",
+  ),
+  nativeImageAgentMerge := true,
 )
 
 val shared = project.settings(
@@ -47,15 +61,7 @@ val client = project
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-client" % Versions.tapir,
       "ch.qos.logback" % "logback-classic" % Versions.logback,
     ),
-    Compile / mainClass := Some("steve.Main"),
-    nativeImageVersion := "21.2.0",
-    nativeImageOptions ++= Seq(
-      s"-H:ReflectionConfigurationFiles=${(Compile / resourceDirectory).value / "reflect-config.json"}",
-      s"-H:ResourceConfigurationFiles=${(Compile / resourceDirectory).value / "resource-config.json"}",
-      "-H:+ReportExceptionStackTraces",
-      "--no-fallback", // Don't fall back to the JVM if the native build fails
-      "--allow-incomplete-classpath",
-    ),
+    nativeImageSettings
   )
   .enablePlugins(NativeImagePlugin)
   .dependsOn(shared)
