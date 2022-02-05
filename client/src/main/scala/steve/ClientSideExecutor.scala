@@ -12,18 +12,19 @@ object ClientSideExecutor {
   def instance[F[_]: Http4sClientInterpreter: MonadCancelThrow](client: Client[F]): Executor[F] =
     new Executor {
 
-      private def runEndpoint[I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any], input: I): F[O] = {
+      private def runEndpoint[I, E <: Throwable, O](
+        endpoint: Endpoint[Unit, I, E, O, Any],
+        input: I,
+      ): F[O] = {
         val (req, handler) = summon[Http4sClientInterpreter[F]]
           .toRequestUnsafe(endpoint, Some(uri"http://localhost:8080"))
           .apply(input)
         client.run(req).use(handler).rethrow
       }
 
-      def build(build: Build): F[Hash] =
-        runEndpoint(protocol.build, build)
+      def build(build: Build): F[Hash] = runEndpoint(protocol.build, build)
 
-      def run(run: Hash): F[SystemState] = 
-        runEndpoint(protocol.run, run)
+      def run(run: Hash): F[SystemState] = runEndpoint(protocol.run, run)
     }
 
 }
