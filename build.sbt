@@ -8,7 +8,7 @@ val Versions =
     val catsEffect = "3.3.5"
     val munit = "1.0.7"
     val tapir = "0.19.3"
-    val http4s = "0.23.9"
+    val http4s = "0.23.10"
     val logback = "1.2.10"
   }
 
@@ -61,7 +61,7 @@ val client = project
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-client" % Versions.tapir,
       "ch.qos.logback" % "logback-classic" % Versions.logback,
     ),
-    nativeImageSettings
+    nativeImageSettings,
   )
   .enablePlugins(NativeImagePlugin)
   .dependsOn(shared)
