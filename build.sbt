@@ -61,7 +61,7 @@ val client = project
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-client" % Versions.tapir,
       "ch.qos.logback" % "logback-classic" % Versions.logback,
     ),
-    nativeImageSettings
+    nativeImageSettings,
   )
   .enablePlugins(NativeImagePlugin)
   .dependsOn(shared)
