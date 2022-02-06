@@ -17,6 +17,7 @@ val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.typelevel" %% "cats-effect" % Versions.catsEffect,
     "org.typelevel" %% "munit-cats-effect-3" % Versions.munit % Test,
+    // compilerPlugin("org.polyvariant" %% "better-tostring" % "0.3.9" cross CrossVersion.full),
   ),
 )
 
@@ -65,6 +66,10 @@ val client = project
   )
   .enablePlugins(NativeImagePlugin)
   .dependsOn(shared)
+
+val e2e = project
+  .settings(commonSettings)
+  .dependsOn(server , client)
 
 val root = project
   .in(file("."))
