@@ -69,7 +69,7 @@ val client = project
 
 val e2e = project
   .settings(commonSettings)
-  .dependsOn(server , client)
+  .dependsOn(server, client)
 
 val root = project
   .in(file("."))
