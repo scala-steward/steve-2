@@ -6,10 +6,16 @@ import org.http4s.implicits.*
 import cats.implicits.*
 import sttp.tapir.client.http4s.Http4sClientInterpreter
 import sttp.tapir.Endpoint
+import sttp.model.StatusCodes
+import sttp.model.StatusCode
 
 object ClientSideExecutor {
 
-  def instance[F[_]: Http4sClientInterpreter: MonadCancelThrow](client: Client[F]): Executor[F] =
+  def instance[F[_]: Http4sClientInterpreter: MonadCancelThrow](
+    client: Client[F]
+  )(
+    using fs2.Compiler[F, F]
+  ): Executor[F] =
     new Executor {
 
       private def runEndpoint[I, E <: Throwable, O](
@@ -19,7 +25,21 @@ object ClientSideExecutor {
         val (req, handler) = summon[Http4sClientInterpreter[F]]
           .toRequestUnsafe(endpoint, Some(uri"http://localhost:8080"))
           .apply(input)
-        client.run(req).use(handler).rethrow
+        client
+          .run(req)
+          .use {
+            case resp if resp.status == StatusCode.InternalServerError =>
+              resp
+                .bodyText
+                .compile
+                .string
+                .flatMap { s =>
+                  println(s"RESPONSE = $s")
+                  io.circe.parser.decode[GenericServerError](s).liftTo[F]
+                }
+                .flatMap(_.raiseError[F, O])
+            case resp => handler(resp).rethrow
+          }
       }
 
       def build(build: Build): F[Hash] = runEndpoint(protocol.build, build)
