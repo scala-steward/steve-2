@@ -33,10 +33,7 @@ object ClientSideExecutor {
                 .bodyText
                 .compile
                 .string
-                .flatMap { s =>
-                  println(s"RESPONSE = $s")
-                  io.circe.parser.decode[GenericServerError](s).liftTo[F]
-                }
+                .flatMap(io.circe.parser.decode[GenericServerError](_).liftTo[F])
                 .flatMap(_.raiseError[F, O])
             case resp => handler(resp).rethrow
           }
