@@ -7,7 +7,7 @@ val Versions =
   new {
     val catsEffect = "3.3.5"
     val munit = "1.0.7"
-    val tapir = "0.19.3"
+    val tapir = "0.19.4"
     val http4s = "0.23.10"
     val logback = "1.2.10"
   }
@@ -69,7 +69,7 @@ val client = project
 
 val e2e = project
   .settings(commonSettings)
-  .dependsOn(server , client)
+  .dependsOn(server, client)
 
 val root = project
   .in(file("."))
