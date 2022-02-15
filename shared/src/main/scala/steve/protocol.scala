@@ -12,11 +12,13 @@ object protocol {
     .in("build")
     .in(jsonBody[Build])
     .out(jsonBody[Hash])
+    .errorOut(jsonBody[GenericServerError])
 
   val run = base
     .post
     .in("run")
     .in(jsonBody[Hash])
     .out(jsonBody[SystemState])
+    .errorOut(jsonBody[GenericServerError])
 
 }
