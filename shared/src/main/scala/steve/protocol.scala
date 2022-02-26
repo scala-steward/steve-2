@@ -1,5 +1,7 @@
 package steve
 
+import sttp.model.StatusCode
+
 object protocol {
   import sttp.tapir._
   import sttp.tapir.json.circe._
@@ -7,12 +9,12 @@ object protocol {
 
   private val base = infallibleEndpoint.in("api")
 
-  val build = base
+  val build: Endpoint[Unit, Build, Build.Error, Hash, Any] = base
     .put
     .in("build")
     .in(jsonBody[Build])
     .out(jsonBody[Hash])
-    .errorOut(jsonBody[GenericServerError])
+    .errorOut(statusCode(StatusCode.UnprocessableEntity).and(jsonBody[Build.Error]))
 
   val run = base
     .post
