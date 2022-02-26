@@ -21,7 +21,8 @@ class CompatTests extends CatsEffectSuite {
   val goodBuild: Build = Build.empty
   val goodBuildResult: Hash = Hash(List.empty)
 
-  val unexpectedFailingHash: Hash = Hash(List(1))
+  val unknownHash = Hash(List(1))
+  val unexpectedFailingHash: Hash = unknownHash
   val unexpectedFailingBuild: Build = Build(Build.Base.EmptyImage, List(Build.Command.Delete("k")))
 
   val buildInternalError: Throwable = new Exception("build internal error")
@@ -29,9 +30,16 @@ class CompatTests extends CatsEffectSuite {
   val goodHash: Hash = Hash(List.empty)
   val goodRunResult: SystemState = SystemState(Map.empty)
 
+  val unknownBaseBuild: Build = Build(
+    Build.Base.ImageReference(unknownHash),
+    Nil
+  )
+  val unknownBaseError: Throwable = Build.Error.UnknownBase(unknownHash)
+
   val exec: Executor[IO] = testExecutor(
     Map(
       goodBuild -> goodBuildResult.asRight,
+      unknownBaseBuild -> unknownBaseError.asLeft,
       unexpectedFailingBuild -> buildInternalError.asLeft,
     ),
     Map(
@@ -50,10 +58,17 @@ class CompatTests extends CatsEffectSuite {
     )
   )
 
-  test("Build empty image successfully") {
+  test("Build image - success") {
     assertIO(
       client.build(goodBuild),
       goodBuildResult,
+    )
+  }
+  
+  test("Build image - unkown base error") {
+    assertIO(
+      client.build(unknownBaseBuild).attempt,
+      unknownBaseError.asLeft
     )
   }
 
@@ -64,7 +79,7 @@ class CompatTests extends CatsEffectSuite {
     )
   }
 
-  test("Run empty image successfully") {
+  test("Run image - success") {
     assertIO(
       client.run(goodHash),
       goodRunResult,

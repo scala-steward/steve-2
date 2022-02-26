@@ -15,7 +15,7 @@ object Routing {
   def instance[F[_]: Async](exec: Executor[F]): HttpApp[F] = {
 
     val endpoints: List[ServerEndpoint[Any, F]] = List(
-      protocol.build.serverLogicSuccess(exec.build),
+      protocol.build.serverLogicRecoverErrors(exec.build),
       protocol.run.serverLogicSuccess(exec.run),
     )
     Http4sServerInterpreter[F](

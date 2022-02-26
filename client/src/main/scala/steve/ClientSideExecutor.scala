@@ -28,7 +28,7 @@ object ClientSideExecutor {
         client
           .run(req)
           .use {
-            case resp if resp.status == StatusCode.InternalServerError =>
+            case resp if resp.status.code == StatusCode.InternalServerError.code =>
               resp
                 .bodyText
                 .compile
