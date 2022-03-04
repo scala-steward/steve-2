@@ -7,7 +7,7 @@ class ServerSideExecutorTests extends CatsEffectSuite {
 
   test("build and run empty image") {
     assertEquals(
-      exec.build(Build.empty).flatMap(exec.run).map(_.getAll),
+      exec.build(Build.empty).flatMap(exec.run).map(_.all),
       Right(Map.empty),
     )
   }
