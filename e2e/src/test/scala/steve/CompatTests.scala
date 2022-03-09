@@ -9,15 +9,6 @@ import cats.syntax.all.*
 
 class CompatTests extends CatsEffectSuite {
 
-  def testExecutor(
-    buildImpl: Map[Build, Either[Throwable, Hash]],
-    runImpl: Map[Hash, Either[Throwable, SystemState]],
-  ): Executor[IO] =
-    new Executor[IO] {
-      override def build(build: Build): IO[Hash] = buildImpl(build).liftTo[IO]
-      override def run(hash: Hash): IO[SystemState] = runImpl(hash).liftTo[IO]
-    }
-
   val goodBuild: Build = Build.empty
   val goodBuildResult: Hash = Hash(List.empty)
 
@@ -36,7 +27,7 @@ class CompatTests extends CatsEffectSuite {
   )
   val unknownBaseError: Throwable = Build.Error.UnknownBase(unknownHash)
 
-  val exec: Executor[IO] = testExecutor(
+  val exec: Executor[IO] = TestExecutor.instance(
     Map(
       goodBuild -> goodBuildResult.asRight,
       unknownBaseBuild -> unknownBaseError.asLeft,
