@@ -42,6 +42,8 @@ val shared = project.settings(
   ),
 )
 
+def full(p: Project) = p % "compile->compile;test->test"
+
 val server = project
   .settings(
     commonSettings,
@@ -50,9 +52,11 @@ val server = project
       "org.http4s" %% "http4s-ember-server" % Versions.http4s,
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % Versions.tapir,
       "ch.qos.logback" % "logback-classic" % Versions.logback,
+      "org.http4s" %% "http4s-circe" % Versions.http4s % Test,
+      "org.http4s" %% "http4s-client" % Versions.http4s % Test,
     ),
   )
-  .dependsOn(shared)
+  .dependsOn(full(shared))
 
 val client = project
   .settings(
@@ -65,14 +69,14 @@ val client = project
     nativeImageSettings,
   )
   .enablePlugins(NativeImagePlugin)
-  .dependsOn(shared)
+  .dependsOn(full(shared))
 
 val e2e = project
   .settings(commonSettings)
-  .dependsOn(server, client)
+  .dependsOn(full(server), full(client))
 
 val root = project
   .in(file("."))
   .settings(publish := {})
   .settings(commonSettings)
-  .aggregate(shared, server, client)
+  .aggregate(shared, server, client, e2e)

@@ -40,7 +40,7 @@ object Build {
 
 final case class Hash(value: List[Byte]) derives Codec.AsObject, Schema
 
-final case class SystemState(getAll: Map[String, String]) derives Codec.AsObject, Schema
+final case class SystemState(all: Map[String, String]) derives Codec.AsObject, Schema
 
 final case class GenericServerError(message: String) extends Exception(message)
   derives Codec.AsObject,
