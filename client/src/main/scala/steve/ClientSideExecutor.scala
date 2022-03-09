@@ -5,7 +5,7 @@ import org.http4s.client.Client
 import org.http4s.implicits.*
 import cats.implicits.*
 import sttp.tapir.client.http4s.Http4sClientInterpreter
-import sttp.tapir.Endpoint
+import sttp.tapir.PublicEndpoint
 import sttp.model.StatusCodes
 import sttp.model.StatusCode
 
@@ -19,11 +19,11 @@ object ClientSideExecutor {
     new Executor {
 
       private def runEndpoint[I, E <: Throwable, O](
-        endpoint: Endpoint[Unit, I, E, O, Any],
+        endpoint: PublicEndpoint[I, E, O, Any],
         input: I,
       ): F[O] = {
         val (req, handler) = summon[Http4sClientInterpreter[F]]
-          .toRequestUnsafe(endpoint, Some(uri"http://localhost:8080"))
+          .toRequestThrowDecodeFailures(endpoint, Some(uri"http://localhost:8080"))
           .apply(input)
         client
           .run(req)
