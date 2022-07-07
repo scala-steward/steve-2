@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.1.1"
+ThisBuild / scalaVersion := "3.1.3"
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / githubWorkflowPublishTargetBranches := Seq()
 Global / onChangedBuildSource := ReloadOnSourceChanges
