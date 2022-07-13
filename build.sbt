@@ -5,7 +5,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val Versions =
   new {
-    val catsEffect = "3.3.7"
+    val catsEffect = "3.3.14"
     val munit = "1.0.7"
     val tapir = "0.20.1"
     val http4s = "0.23.10"
