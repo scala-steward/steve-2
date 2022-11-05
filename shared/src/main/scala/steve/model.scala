@@ -16,6 +16,26 @@ final case class Build(
 
 object Build {
 
+  def compile(build: Build): List[]
+
+  def execute(build: Build, initState: SystemState, builds: (Hash, SystemState) => SystemState): SystemState = {
+    val initState1 = build.base match {
+      case Base.EmptyImage => initState
+      case Base.ImageReference(hash) => builds(hash, initState)
+    }
+    build.commands.foldLeft(initState1) {
+      case (state, command) =>
+        applyCommand(command, state)
+    }
+  }
+
+  def applyCommand(command: Command, systemState: SystemState): SystemState = {
+    command match {
+      case Command.Upsert(key, value) => SystemState(systemState.all.updated(key, value))
+      case Command.Delete(key) => SystemState(systemState.all - key)
+    }
+  }
+  
   val empty = Build(
     base = Base.EmptyImage,
     commands = Nil,
