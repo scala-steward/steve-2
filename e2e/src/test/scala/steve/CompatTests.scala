@@ -23,8 +23,9 @@ class CompatTests extends CatsEffectSuite {
 
   val unknownBaseBuild: Build = Build(
     Build.Base.ImageReference(unknownHash),
-    Nil
+    Nil,
   )
+
   val unknownBaseError: Throwable = Build.Error.UnknownBase(unknownHash)
 
   val exec: Executor[IO] = TestExecutor.instance(
@@ -55,11 +56,11 @@ class CompatTests extends CatsEffectSuite {
       goodBuildResult,
     )
   }
-  
+
   test("Build image - unkown base error") {
     assertIO(
       client.build(unknownBaseBuild).attempt,
-      unknownBaseError.asLeft
+      unknownBaseError.asLeft,
     )
   }
 
